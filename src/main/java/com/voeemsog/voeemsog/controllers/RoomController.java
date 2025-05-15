@@ -18,13 +18,20 @@ public class RoomController {
 
     @GetMapping()
     public List<RoomDTO> getAllRooms(@RequestParam String lang){
-        lang = lang == null ? "us" : lang;
         return roomService.getAllRooms(lang);
     }
 
     @GetMapping("/{id}")
     public RoomDTO getRoomById(@PathVariable UUID id, @RequestParam String lang){
-        lang = lang == null ? "us" : lang;
         return roomService.getRoomById(id, lang);
+    }
+
+    @GetMapping("/name/{name}")
+    public List<RoomDTO> getRoomsByName(@PathVariable String name, @RequestParam String lang){
+        return roomService.getRoomsByName(name, lang);
+    }
+    @GetMapping("/code/{code}")
+    public List<RoomDTO> getRoomsByCode(@PathVariable String code, @RequestParam String lang){
+        return roomService.getRoomsByCode(code, lang);
     }
 }

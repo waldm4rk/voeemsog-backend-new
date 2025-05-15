@@ -31,6 +31,23 @@ public class RoomService {
         return roomToDTO(roomRepository.getRoomById(id), lang);
     }
 
+    public List<RoomDTO> getRoomsByName(String name, String lang){
+        List<RoomTranslation> translations = roomTranslationRepository.getRoomTranslationsByNameContainingIgnoreCaseAndLang(name, lang);
+        List<RoomDTO> dtos = new ArrayList<>();
+        for(RoomTranslation translation : translations){
+            dtos.add(roomToDTO(translation.getRoom(), lang));
+        }
+        return dtos;
+    }
+
+    public List<RoomDTO> getRoomsByCode(String code, String lang){
+        List<Room> rooms = roomRepository.getRoomsByCodeContainingIgnoreCase(code);
+        List<RoomDTO> dtos = new ArrayList<>();
+        for(Room room : rooms){
+            dtos.add(roomToDTO(room, lang));
+        }
+        return dtos;
+    }
     public RoomDTO roomToDTO(Room room, String lang){
         RoomTranslation roomTranslation = roomTranslationRepository.getRoomTranslationByRoomAndLang(room, lang);
         RoomDTO dto = new RoomDTO(
