@@ -3,7 +3,7 @@ package com.voeemsog.voeemsog;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.voeemsog.voeemsog")
 public class VoeemsogApplication {
 
     public static void main(String[] args) {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/rooms")
@@ -22,7 +23,7 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public RoomDTO getRoomById(@PathVariable long id, @RequestParam String lang){
+    public RoomDTO getRoomById(@PathVariable UUID id, @RequestParam String lang){
         lang = lang == null ? "us" : lang;
         return roomService.getRoomById(id, lang);
     }

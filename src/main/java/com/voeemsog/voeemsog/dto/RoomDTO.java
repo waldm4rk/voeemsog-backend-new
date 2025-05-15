@@ -1,5 +1,10 @@
 package com.voeemsog.voeemsog.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class RoomDTO {
     private String code;
     private int floor;

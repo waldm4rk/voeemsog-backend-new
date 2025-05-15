@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RoomService {
@@ -17,8 +18,6 @@ public class RoomService {
     private RoomRepository roomRepository;
     @Autowired
     private RoomTranslationRepository roomTranslationRepository;
-    @Autowired
-    private RoomMapper roomMapper;
 
     public List<RoomDTO> getAllRooms(String lang){
         List<Room> list = roomRepository.findAll();
@@ -28,12 +27,22 @@ public class RoomService {
         }
         return roomDTOS;
     }
-    public RoomDTO getRoomById(long id, String lang){
+    public RoomDTO getRoomById(UUID id, String lang){
         return roomToDTO(roomRepository.getRoomById(id), lang);
     }
 
     public RoomDTO roomToDTO(Room room, String lang){
-        RoomTranslation roomTranslation = roomTranslationRepository.getRoomTranslationByIdAndLang(room.getId(), lang);
-        return roomMapper.toDto(room, roomTranslation);
+        RoomTranslation roomTranslation = roomTranslationRepository.getRoomTranslationByRoomAndLang(room, lang);
+        RoomDTO dto = new RoomDTO(
+                room.getCode(),
+                room.getFloor(),
+                room.getDangerType(),
+                roomTranslation.getName(),
+                roomTranslation.getDescription(),
+                room.getSize(),
+                room.getColor(),
+                room.getLightLevel()
+        );
+        return dto;
     }
 }
