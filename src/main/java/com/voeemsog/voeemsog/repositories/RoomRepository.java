@@ -12,4 +12,7 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
     Room getRoomById(UUID id);
 
     List<Room> getRoomsByCodeContainingIgnoreCase(String code);
+    List<Room> getRoomsByDangerType(String dangerType);
+
+    List<Room> getRoomsBySize(String size);
 }

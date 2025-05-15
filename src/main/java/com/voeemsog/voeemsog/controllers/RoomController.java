@@ -34,4 +34,14 @@ public class RoomController {
     public List<RoomDTO> getRoomsByCode(@PathVariable String code, @RequestParam String lang){
         return roomService.getRoomsByCode(code, lang);
     }
+
+    @GetMapping("/danger/{danger}")
+    public List<RoomDTO> getRoomsByDanger(@PathVariable String danger, @RequestParam String lang){
+        return roomService.getRoomsByDanger(danger, lang);
+    }
+
+    @GetMapping("/size/{size}")
+    public List<RoomDTO> getRoomsBySize(@PathVariable String size, @RequestParam String lang){
+        return roomService.getRoomsBySize(size, lang);
+    }
 }
