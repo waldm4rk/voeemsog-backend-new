@@ -1,11 +1,7 @@
 package com.voeemsog.voeemsog.controllers;
 
 import com.voeemsog.voeemsog.dto.RoomDTO;
-import com.voeemsog.voeemsog.models.Room;
-import com.voeemsog.voeemsog.models.RoomTranslation;
-import com.voeemsog.voeemsog.repositories.RoomRepository;
 import com.voeemsog.voeemsog.services.RoomService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +23,7 @@ public class RoomController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable UUID id, @RequestParam String lang){
-        RoomDTO room = roomService.getRoomById(id, lang);
+        RoomDTO room = roomService.getRoomDTOById(id, lang);
         if(room != null) return new ResponseEntity<>(room, HttpStatusCode.valueOf(200));
         else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
     }

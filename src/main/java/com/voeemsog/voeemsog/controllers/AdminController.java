@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -23,10 +25,16 @@ public class AdminController {
 
     @PostMapping("/room")
     public ResponseEntity<Room> createRoom(@RequestBody Room room){
-        return new ResponseEntity<>(roomRepository.save(room), HttpStatusCode.valueOf(201));
+        return new ResponseEntity<>(roomRepository.saveAndFlush(room), HttpStatusCode.valueOf(201));
     }
     @PostMapping("/room/translation")
-    public ResponseEntity<RoomTranslation> createTranslation(@RequestBody RoomTranslation translation){
-        return new ResponseEntity<>(roomTranslationRepository.save(translation), HttpStatusCode.valueOf(201));
+    public ResponseEntity<?> createTranslation(@RequestBody RoomTranslation translation, @RequestParam UUID roomId){
+        Room room = roomService.getRoomById(roomId).orElse(null);
+        if(room == null){
+            return new ResponseEntity<>(false, HttpStatusCode.valueOf(404));
+        }
+        translation.setRoom(room);
+        roomTranslationRepository.saveAndFlush(translation);
+        return new ResponseEntity<>(true, HttpStatusCode.valueOf(201));
     }
 }
