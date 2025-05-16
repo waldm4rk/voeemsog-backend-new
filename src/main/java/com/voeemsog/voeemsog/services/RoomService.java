@@ -8,9 +8,9 @@ import com.voeemsog.voeemsog.repositories.RoomTranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,8 +24,11 @@ public class RoomService {
         List<Room> rooms = roomRepository.findAll();
         return fillWithDto(rooms, lang);
     }
-    public RoomDTO getRoomById(UUID id, String lang){
+    public RoomDTO getRoomDTOById(UUID id, String lang){
         return roomToDTO(roomRepository.getRoomById(id).orElse(null), lang);
+    }
+    public Optional<Room> getRoomById(UUID id){
+        return roomRepository.getRoomById(id);
     }
 
     public List<RoomDTO> getRoomsByName(String name, String lang){
