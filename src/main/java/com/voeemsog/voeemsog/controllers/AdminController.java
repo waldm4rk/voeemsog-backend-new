@@ -34,6 +34,7 @@ public class AdminController {
             return new ResponseEntity<>(false, HttpStatusCode.valueOf(404));
         }
         translation.setRoom(room);
+        roomTranslationRepository.saveAndFlush(translation);
         return new ResponseEntity<>(true, HttpStatusCode.valueOf(201));
     }
 }
