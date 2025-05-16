@@ -25,7 +25,7 @@ public class RoomService {
         return fillWithDto(rooms, lang);
     }
     public RoomDTO getRoomById(UUID id, String lang){
-        return roomToDTO(roomRepository.getRoomById(id), lang);
+        return roomToDTO(roomRepository.getRoomById(id).orElse(null), lang);
     }
 
     public List<RoomDTO> getRoomsByName(String name, String lang){

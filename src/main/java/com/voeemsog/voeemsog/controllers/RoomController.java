@@ -2,9 +2,13 @@ package com.voeemsog.voeemsog.controllers;
 
 import com.voeemsog.voeemsog.dto.RoomDTO;
 import com.voeemsog.voeemsog.models.Room;
+import com.voeemsog.voeemsog.models.RoomTranslation;
 import com.voeemsog.voeemsog.repositories.RoomRepository;
 import com.voeemsog.voeemsog.services.RoomService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,26 +26,36 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public RoomDTO getRoomById(@PathVariable UUID id, @RequestParam String lang){
-        return roomService.getRoomById(id, lang);
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable UUID id, @RequestParam String lang){
+        RoomDTO room = roomService.getRoomById(id, lang);
+        if(room != null) return new ResponseEntity<>(room, HttpStatusCode.valueOf(200));
+        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
     }
 
     @GetMapping("/name/{name}")
-    public List<RoomDTO> getRoomsByName(@PathVariable String name, @RequestParam String lang){
-        return roomService.getRoomsByName(name, lang);
+    public ResponseEntity<List<RoomDTO>> getRoomsByName(@PathVariable String name, @RequestParam String lang){
+        List<RoomDTO> rooms = roomService.getRoomsByName(name, lang);
+        if(!rooms.isEmpty()) return new ResponseEntity<>(rooms, HttpStatusCode.valueOf(200));
+        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
     }
     @GetMapping("/code/{code}")
-    public List<RoomDTO> getRoomsByCode(@PathVariable String code, @RequestParam String lang){
-        return roomService.getRoomsByCode(code, lang);
+    public ResponseEntity<List<RoomDTO>> getRoomsByCode(@PathVariable String code, @RequestParam String lang){
+        List<RoomDTO> rooms = roomService.getRoomsByCode(code, lang);
+        if(!rooms.isEmpty()) return new ResponseEntity<>(rooms, HttpStatusCode.valueOf(200));
+        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
     }
 
     @GetMapping("/danger/{danger}")
-    public List<RoomDTO> getRoomsByDanger(@PathVariable String danger, @RequestParam String lang){
-        return roomService.getRoomsByDanger(danger, lang);
+    public ResponseEntity<List<RoomDTO>> getRoomsByDanger(@PathVariable String danger, @RequestParam String lang){
+        List<RoomDTO> rooms = roomService.getRoomsByDanger(danger, lang);
+        if(!rooms.isEmpty()) return new ResponseEntity<>(rooms, HttpStatusCode.valueOf(200));
+        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
     }
 
     @GetMapping("/size/{size}")
-    public List<RoomDTO> getRoomsBySize(@PathVariable String size, @RequestParam String lang){
-        return roomService.getRoomsBySize(size, lang);
+    public ResponseEntity<List<RoomDTO>> getRoomsBySize(@PathVariable String size, @RequestParam String lang){
+        List<RoomDTO> rooms = roomService.getRoomsBySize(size, lang);
+        if(!rooms.isEmpty()) return new ResponseEntity<>(rooms, HttpStatusCode.valueOf(200));
+        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
     }
 }
