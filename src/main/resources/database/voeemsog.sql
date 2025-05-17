@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.5
--- Dumped by pg_dump version 17.5
+-- Dumped from database version 17.4
+-- Dumped by pg_dump version 17.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -22,7 +22,41 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: room_translations; Type: TABLE; Schema: public; Owner: sitemployee
+-- Name: archive_category; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.archive_category (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    name character varying(100) NOT NULL,
+    description text,
+    lang character varying(5) NOT NULL,
+    category_code integer NOT NULL
+);
+
+
+ALTER TABLE public.archive_category OWNER TO postgres;
+
+--
+-- Name: article; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.article (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    name character varying(100) NOT NULL,
+    parent_articles text,
+    description text,
+    text text NOT NULL,
+    author character varying(50),
+    creation_date character varying(100),
+    lang character varying(5) NOT NULL,
+    article_code integer NOT NULL
+);
+
+
+ALTER TABLE public.article OWNER TO postgres;
+
+--
+-- Name: room_translations; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.room_translations (
@@ -34,10 +68,10 @@ CREATE TABLE public.room_translations (
 );
 
 
-ALTER TABLE public.room_translations OWNER TO sitemployee;
+ALTER TABLE public.room_translations OWNER TO postgres;
 
 --
--- Name: rooms; Type: TABLE; Schema: public; Owner: sitemployee
+-- Name: rooms; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.rooms (
@@ -51,10 +85,26 @@ CREATE TABLE public.rooms (
 );
 
 
-ALTER TABLE public.rooms OWNER TO sitemployee;
+ALTER TABLE public.rooms OWNER TO postgres;
 
 --
--- Data for Name: room_translations; Type: TABLE DATA; Schema: public; Owner: sitemployee
+-- Data for Name: archive_category; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.archive_category (id, name, description, lang, category_code) FROM stdin;
+\.
+
+
+--
+-- Data for Name: article; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.article (id, name, parent_articles, description, text, author, creation_date, lang, article_code) FROM stdin;
+\.
+
+
+--
+-- Data for Name: room_translations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.room_translations (id, lang, name, description, room_id) FROM stdin;
@@ -63,22 +113,56 @@ f5ad36a8-e237-4a19-a99b-c5e6b3066395	ru_RU	Дальше бога нет	**Опи
 bcf4aebb-61e9-453b-b9cd-3ad6f6d666a9	ru_RU	Лестница вверх 1	**Описание помещения:**  \nBP-429-1 переходит в короткую, но круто восходящую лестницу. Потолок низкий — около 2 метров — и нависает над субъектом, вызывая лёгкое клаустрофобное ощущение, особенно при приближении к лестничной части. Стены окрашены в выцветший оливково-серый цвет и местами покрыты пятнами, похожими на водяные разводы. На всём протяжении коридора царит сухая тишина, нарушаемая лишь эхом собственных шагов.\n\nПо обеим стенам размещены **семейные фотографии в деревянных рамах**. Всего — 18 штук, по 9 с каждой стороны. Изображения различны: пожилые пары, родители с детьми, групповые портреты на фоне неузнаваемых интерьеров. Лица улыбаются, но улыбки кажутся напряжёнными, слишком широкими. Все фотографии сняты в однотонной жёлтой гамме, как будто через старый светофильтр или потускневшую фотоплёнку. Неизвестны личности на фото — ни одна попытка идентификации не увенчалась успехом. Некоторые субъекты утверждали, что лица на снимках им знакомы, но не могли назвать ни имён, ни деталей.\n\nПо данным SIT, фотографии обладают **аномальной стойкостью**: их невозможно разбить или сжечь. При попытке сфотографировать или скопировать изображения они искажаются — лица на снимках размываются, а фон исчезает.\n\n**Переход в лестницу:**  \nПосле прохождения коридора субъект сталкивается с переходом на **лестницу из старого дерева**, врезанную в корпус комнаты. Лестница состоит из 12 ступеней и резко уходит вверх под углом около 50°. Поручней нет. Деревянные доски скрипят, но не прогибаются и не ломаются, даже при значительном весе. При шаге на третью ступень слышен еле уловимый **щелчок**, источник которого не удалось установить — ни одна аппаратура не фиксирует посторонних звуков в этот момент.\n\nСлева, над шестой ступенью, висит металлическая табличка с надписью:  \n**«Ты уже был здесь?»**  \nНадпись выполнена вручную, фломастером, и, по словам наблюдателей, ранее отсутствовала.\n\n**Верхняя дверь:**  \nЛестница ведёт к массивной двери, на которой закреплён **предупредительный плакат**, установленный SIT:\n\n> ### [[ФОТОГРАФИЯ ПЛАКАТА]]\n\n**Примечания:**\n\n- BP-429-1 — первое помещение, зафиксированное SIT, ведущее на **второй этаж** Воеемсога.\n    \n- Фотографии изъяты и принадлежат организации SIT.	161cfb09-a5d8-416f-94f1-f51bf128e03b
 e53c9e82-979c-401d-a7b7-6d7ee097aed8	en_US	Stairway up 1	BP-429-1 transitions into a short but steep upward staircase. The ceiling is low — about 2 meters — and presses down on the subject, evoking a mild sense of claustrophobia, especially near the start of the stairs. The walls are painted a faded olive-gray and are spotted with stains resembling old watermarks. A dry, heavy silence dominates the corridor, broken only by the echo of the subject’s own footsteps.\n\nLining both walls are **family photographs in wooden frames** — 18 in total, 9 on each side. The images vary: elderly couples, parents with children, group portraits taken in unidentifiable interiors. The faces are smiling, but the smiles feel tense — **too wide, too strained**. All photos are rendered in a flat yellow hue, as if viewed through an old filter or faded film. The individuals in the photographs remain unidentified — all attempts at recognition have failed. Some subjects have claimed the faces feel familiar but are unable to recall any names or details.\n\nAccording to SIT records, the photographs exhibit **anomalous resilience**: they cannot be broken or burned. Attempts to photograph or replicate the images result in distortions — the faces blur, and the backgrounds disappear.\n\n**Transition to the Staircase:**  \nAt the end of the hallway, the subject encounters a **steep staircase made of aged wood**, seamlessly embedded into the room’s structure. It contains 12 steps, ascending sharply at a ~50° angle. There are no handrails. The boards creak underfoot but do not bend or break, regardless of weight. Upon stepping on the third step, a **barely audible click** is heard — its source remains unidentified, and no equipment has recorded any unusual sound at that moment.\n\nTo the left, above the sixth step, hangs a **metal plaque** with a handwritten message in marker:  \n**“Have you been here before?”**  \nObservers claim this message **was not present previously**.\n\n**The Upper Door:**  \nAt the top of the stairs is a **heavy door. Attached to it is a **SIT-issued warning poster**:\n\n> ### [[PHOTOGRAPH OF THE POSTER]]\n\n**Notes:**\n\n- BP-429-1 is the **first recorded room** by SIT that leads to the **second floor** of Voeemsog.\n    \n- All photographs have been confiscated and are now property of SIT.	161cfb09-a5d8-416f-94f1-f51bf128e03b
 afc6d11c-8ae4-42e7-86f3-de427ede0bd2	ru_RU	Кошмарные муки	123	f5574f7c-8661-4981-a34c-059fc2c56a6c
+e7abd604-05e9-4daf-a3d2-25111db2bdaf	ru_RU	Пустая вечеря	тестовое описание	323e1552-807c-4998-9d2e-7278b2214600
 \.
 
 
 --
--- Data for Name: rooms; Type: TABLE DATA; Schema: public; Owner: sitemployee
+-- Data for Name: rooms; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.rooms (id, code, floor, danger_type, size, color, light_level) FROM stdin;
 5d09d9c9-ba45-44ea-a3b9-7a8be0c83484	AK-610	1	5	3x4	RED	1
 161cfb09-a5d8-416f-94f1-f51bf128e03b	BP-429	1	0	2x1	BLUE	3
 f5574f7c-8661-4981-a34c-059fc2c56a6c	BU-614	1	5	3x1	BLUE	0
+323e1552-807c-4998-9d2e-7278b2214600	GT-114	1	2	1x1	YELLOW	3
 \.
 
 
 --
--- Name: room_translations room_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: sitemployee
+-- Name: archive_category archive_category_category_code_lang_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.archive_category
+    ADD CONSTRAINT archive_category_category_code_lang_key UNIQUE (category_code, lang);
+
+
+--
+-- Name: archive_category archive_category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.archive_category
+    ADD CONSTRAINT archive_category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: article article_article_code_lang_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.article
+    ADD CONSTRAINT article_article_code_lang_key UNIQUE (article_code, lang);
+
+
+--
+-- Name: article article_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.article
+    ADD CONSTRAINT article_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: room_translations room_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.room_translations
@@ -86,7 +170,7 @@ ALTER TABLE ONLY public.room_translations
 
 
 --
--- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: sitemployee
+-- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rooms
@@ -94,39 +178,25 @@ ALTER TABLE ONLY public.rooms
 
 
 --
--- Name: idx_room_code; Type: INDEX; Schema: public; Owner: sitemployee
+-- Name: idx_room_code; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE INDEX idx_room_code ON public.rooms USING btree (code);
 
 
 --
--- Name: idx_unique_translation; Type: INDEX; Schema: public; Owner: sitemployee
+-- Name: idx_unique_translation; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX idx_unique_translation ON public.room_translations USING btree (room_id, lang);
 
 
 --
--- Name: room_translations fk_room; Type: FK CONSTRAINT; Schema: public; Owner: sitemployee
+-- Name: room_translations fk_room; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.room_translations
     ADD CONSTRAINT fk_room FOREIGN KEY (room_id) REFERENCES public.rooms(id) ON DELETE CASCADE;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: postgres
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO sitemployee;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: postgres
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO sitemployee;
 
 
 --
