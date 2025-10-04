@@ -25,20 +25,20 @@ public class RoomController {
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable UUID id, @RequestParam String lang){
         RoomDTO room = roomService.getRoomDTOById(id, lang);
         if(room != null) return new ResponseEntity<>(room, HttpStatusCode.valueOf(200));
-        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
+        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(204));
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<List<RoomDTO>> getRoomsByName(@PathVariable String name, @RequestParam String lang){
         List<RoomDTO> rooms = roomService.getRoomsByName(name, lang);
         if(!rooms.isEmpty()) return new ResponseEntity<>(rooms, HttpStatusCode.valueOf(200));
-        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
+        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(204));
     }
     @GetMapping("/code/{code}")
     public ResponseEntity<List<RoomDTO>> getRoomsByCode(@PathVariable String code, @RequestParam String lang){
         List<RoomDTO> rooms = roomService.getRoomsByCode(code, lang);
         if(!rooms.isEmpty()) return new ResponseEntity<>(rooms, HttpStatusCode.valueOf(200));
-        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
+        else return new ResponseEntity<>(null, HttpStatusCode.valueOf(204));
     }
 
     @GetMapping("/danger/{danger}")

@@ -11,6 +11,6 @@ import java.util.UUID;
 @Repository
 public interface RoomTranslationRepository extends JpaRepository<RoomTranslation, UUID> {
     RoomTranslation getRoomTranslationByRoomAndLang(Room room, String lang);
-
+    List<RoomTranslation> getRoomTranslationsByRoom(Room room);
     List<RoomTranslation> getRoomTranslationsByNameContainingIgnoreCaseAndLang(String name, String lang);
 }

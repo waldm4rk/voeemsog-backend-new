@@ -13,8 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
-@Component
 @Order(1)
 public class AdminTokenFilter extends OncePerRequestFilter {
 
@@ -27,19 +28,21 @@ public class AdminTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
-        if(path.equals("/admin/login")){
+        String ctx = request.getContextPath();
+        if (ctx != null && !ctx.isEmpty() && path.startsWith(ctx)) {
+            path = path.substring(ctx.length());
+        }
+
+        if(!path.startsWith("/admin") || path.equals("/admin/login") || path.equals("/admin/login/")){
             filterChain.doFilter(request, response);
             return;
         }
-        String token = null;
-        if(request.getCookies() != null){
-            for(Cookie cookie : request.getCookies()){
-                if("admin_token".equals(cookie.getName())){
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
+        String token = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
+                .filter(c -> "admin_token".equals(c.getName()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse(null);
+
         if(token != null && adminTokenService.isTokenValid(token)){
             filterChain.doFilter(request, response);
         }else{
