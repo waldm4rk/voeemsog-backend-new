@@ -17,4 +17,6 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
     List<Room> getRoomsByDangerType(String dangerType);
 
     List<Room> getRoomsBySize(String size);
+
+    Optional<Room> deleteRoomById(UUID id);
 }

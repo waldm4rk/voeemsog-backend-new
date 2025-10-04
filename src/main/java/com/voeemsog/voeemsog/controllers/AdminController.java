@@ -1,5 +1,6 @@
 package com.voeemsog.voeemsog.controllers;
 
+import com.sun.net.httpserver.HttpsServer;
 import com.voeemsog.voeemsog.models.Room;
 import com.voeemsog.voeemsog.models.RoomTranslation;
 import com.voeemsog.voeemsog.repositories.RoomRepository;
@@ -23,18 +24,29 @@ public class AdminController {
     private RoomTranslationRepository roomTranslationRepository;
 
 
+    // Null room crashes server
+    // FIXED?
     @PostMapping("/room")
     public ResponseEntity<Room> createRoom(@RequestBody Room room){
-        return new ResponseEntity<>(roomRepository.saveAndFlush(room), HttpStatusCode.valueOf(201));
+        if(room != null) {
+            return new ResponseEntity<>(roomRepository.saveAndFlush(room), HttpStatusCode.valueOf(201));
+        }
+        return new ResponseEntity<>(null, HttpStatusCode.valueOf(400));
     }
     @PostMapping("/room/translation")
     public ResponseEntity<?> createTranslation(@RequestBody RoomTranslation translation, @RequestParam UUID roomId){
         Room room = roomService.getRoomById(roomId).orElse(null);
         if(room == null){
-            return new ResponseEntity<>(false, HttpStatusCode.valueOf(404));
+            return new ResponseEntity<>(false, HttpStatusCode.valueOf(204));
         }
         translation.setRoom(room);
         roomTranslationRepository.saveAndFlush(translation);
         return new ResponseEntity<>(true, HttpStatusCode.valueOf(201));
+    }
+
+    @DeleteMapping("/room/{id}")
+    public ResponseEntity<?> deleteRoom(@PathVariable UUID id){
+        roomService.deleteRoom(id);
+        return new ResponseEntity<>(false, HttpStatusCode.valueOf(204));
     }
 }

@@ -57,13 +57,17 @@ public class RoomService {
     public List<RoomDTO> fillWithDto(List<Room> rooms, String lang){
         List<RoomDTO> dtos = new LinkedList<>();
         for(Room room : rooms){
-            dtos.add(roomToDTO(room, lang));
+            RoomDTO dto = roomToDTO(room, lang);
+            if(dto != null){
+                dtos.add(dto);
+            }
         }
         return dtos;
     }
 
     public RoomDTO roomToDTO(Room room, String lang){
         RoomTranslation roomTranslation = roomTranslationRepository.getRoomTranslationByRoomAndLang(room, lang);
+        if(roomTranslation == null) return null;
         RoomDTO dto = new RoomDTO(
                 room.getCode(),
                 room.getFloor(),
@@ -76,4 +80,9 @@ public class RoomService {
         );
         return dto;
     }
+
+    public Room deleteRoom(UUID id){
+        return roomRepository.deleteRoomById(id).orElse(null);
+    }
+
 }

@@ -14,7 +14,7 @@ public class AppConfig {
     public FilterRegistrationBean<AdminTokenFilter> adminAuthRegistration (AdminTokenService tokenService){
         FilterRegistrationBean<AdminTokenFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new AdminTokenFilter(tokenService));
-        registrationBean.addUrlPatterns("/admin/*");
+        registrationBean.addUrlPatterns("/admin", "/admin/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }
