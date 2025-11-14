@@ -1,6 +1,7 @@
 package com.voeemsog.voeemsog.controllers;
 
 import com.sun.net.httpserver.HttpsServer;
+import com.voeemsog.voeemsog.dto.RoomDTO;
 import com.voeemsog.voeemsog.models.Room;
 import com.voeemsog.voeemsog.models.RoomTranslation;
 import com.voeemsog.voeemsog.repositories.RoomRepository;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
     @Autowired
     private RoomService roomService;
@@ -28,10 +30,10 @@ public class AdminController {
     // FIXED?
     @PostMapping("/room")
     public ResponseEntity<Room> createRoom(@RequestBody Room room){
-        if(room != null) {
-            return new ResponseEntity<>(roomRepository.saveAndFlush(room), HttpStatusCode.valueOf(201));
+        if(room == null) {
+            return new ResponseEntity<>(null, HttpStatusCode.valueOf(400));
         }
-        return new ResponseEntity<>(null, HttpStatusCode.valueOf(400));
+        return new ResponseEntity<>(roomRepository.saveAndFlush(room), HttpStatusCode.valueOf(201));
     }
     @PostMapping("/room/translation")
     public ResponseEntity<?> createTranslation(@RequestBody RoomTranslation translation, @RequestParam UUID roomId){

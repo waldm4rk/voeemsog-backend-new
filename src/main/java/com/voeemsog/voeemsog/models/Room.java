@@ -3,7 +3,9 @@ package com.voeemsog.voeemsog.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +24,8 @@ public class Room {
     private String color;
     @Column(name="light_level")
     private byte lightLevel;
+
+    private LocalDate date;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RoomTranslation> translations = new ArrayList<>();

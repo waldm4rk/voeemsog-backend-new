@@ -33,7 +33,8 @@ public class AdminLoginController {
             String token = tokenService.generateToken();
             Cookie cookie = new Cookie("admin_token", token);
             cookie.setHttpOnly(true);
-            cookie.setPath("/");
+            cookie.setSecure(true);
+            cookie.setPath("/admin");
             cookie.setMaxAge(30 * 60);
             response.addCookie(cookie);
             return ResponseEntity.ok().build();
