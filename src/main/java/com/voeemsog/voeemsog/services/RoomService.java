@@ -6,6 +6,9 @@ import com.voeemsog.voeemsog.models.RoomTranslation;
 import com.voeemsog.voeemsog.repositories.RoomRepository;
 import com.voeemsog.voeemsog.repositories.RoomTranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -24,6 +27,20 @@ public class RoomService {
         List<Room> rooms = roomRepository.findAll();
         return fillWithDto(rooms, lang);
     }
+    public List<RoomDTO> getRoomsByPage(int page, int limit, String lang){
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by("date").descending());
+        List<Room> rooms = roomRepository.getAllByOrderByDateDesc(pageable);
+        if(rooms.isEmpty()){
+            return null;
+        }
+        return fillWithDto(rooms, lang);
+    }
+
+    public long getNumberOfRooms(){
+        double pages = (double) roomRepository.count() / 10;
+        return (long) Math.ceil(pages);
+    }
+
     public RoomDTO getRoomDTOById(UUID id, String lang){
         return roomToDTO(roomRepository.getRoomById(id).orElse(null), lang);
     }
@@ -65,6 +82,11 @@ public class RoomService {
         return dtos;
     }
 
+    public UUID getIdByCode(String code){
+        return roomRepository.getIdByCode(code);
+    }
+
+
     public RoomDTO roomToDTO(Room room, String lang){
         RoomTranslation roomTranslation = roomTranslationRepository.getRoomTranslationByRoomAndLang(room, lang);
         if(roomTranslation == null) return null;
@@ -76,7 +98,8 @@ public class RoomService {
                 roomTranslation.getDescription(),
                 room.getSize(),
                 room.getColor(),
-                room.getLightLevel()
+                room.getLightLevel(),
+                room.getDate()
         );
         return dto;
     }

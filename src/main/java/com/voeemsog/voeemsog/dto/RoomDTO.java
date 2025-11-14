@@ -3,6 +3,8 @@ package com.voeemsog.voeemsog.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 public class RoomDTO {
@@ -14,4 +16,5 @@ public class RoomDTO {
     private String size;
     private String color;
     private byte lightLevel;
+    private LocalDate date;
 }

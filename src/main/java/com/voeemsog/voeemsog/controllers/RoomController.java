@@ -1,6 +1,7 @@
 package com.voeemsog.voeemsog.controllers;
 
 import com.voeemsog.voeemsog.dto.RoomDTO;
+import com.voeemsog.voeemsog.models.Room;
 import com.voeemsog.voeemsog.services.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -19,6 +20,20 @@ public class RoomController {
     @GetMapping()
     public List<RoomDTO> getAllRooms(@RequestParam String lang){
         return roomService.getAllRooms(lang);
+    }
+
+    @GetMapping("/page/{page}")
+    public ResponseEntity<List<RoomDTO>> getRoomsByPage(@PathVariable int page, @RequestParam String lang){
+        List<RoomDTO> rooms = roomService.getRoomsByPage(page, 10, lang);
+        if(rooms == null){
+            return new ResponseEntity<>(null, HttpStatusCode.valueOf(204));
+        }
+        return new ResponseEntity<>(rooms, HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("/num")
+    public Long getNumberOfPages(){
+        return roomService.getNumberOfRooms();
     }
 
     @GetMapping("/{id}")
@@ -53,5 +68,12 @@ public class RoomController {
         List<RoomDTO> rooms = roomService.getRoomsBySize(size, lang);
         if(!rooms.isEmpty()) return new ResponseEntity<>(rooms, HttpStatusCode.valueOf(200));
         else return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
+    }
+
+    @GetMapping("/code/uuid/{code}")
+    public ResponseEntity<UUID> getUUIDByCode(@PathVariable String code){
+        UUID id = roomService.getIdByCode(code);
+        if (id == null) return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
+        return new ResponseEntity<>(id, HttpStatusCode.valueOf(200));
     }
 }
