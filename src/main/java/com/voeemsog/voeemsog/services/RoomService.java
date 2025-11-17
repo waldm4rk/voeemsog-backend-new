@@ -83,7 +83,7 @@ public class RoomService {
     }
 
     public UUID getIdByCode(String code){
-        return roomRepository.getIdByCode(code);
+        return roomRepository.getIdByCode(code).orElse(null);
     }
 
 

@@ -28,6 +28,6 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
 
 
     @NativeQuery("SELECT id FROM rooms WHERE code = ?1")
-    UUID getIdByCode(String code);
+    Optional<UUID> getIdByCode(String code);
 
 }
