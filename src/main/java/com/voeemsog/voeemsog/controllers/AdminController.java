@@ -55,6 +55,20 @@ public class AdminController {
         return new ResponseEntity<>(true, HttpStatusCode.valueOf(201));
     }
 
+    @PutMapping("/room/translation")
+    public ResponseEntity<?> upsertTranslation(@RequestBody RoomTranslation translation, @RequestParam UUID roomId){
+        RoomTranslation translation1 = roomTranslationRepository.getRoomTranslationByRoomAndLang(roomService.getRoomById(roomId).orElse(null), translation.getLang());
+        if(translation1 != null){
+            translation1.setDescription(translation.getDescription());
+            translation1.setName(translation.getName());
+
+            roomTranslationRepository.saveAndFlush(translation1);
+            return new ResponseEntity<>(true, HttpStatusCode.valueOf(201));
+        }
+        roomTranslationRepository.saveAndFlush(translation);
+        return new ResponseEntity<>(true, HttpStatusCode.valueOf(201));
+    }
+
     @DeleteMapping("/room/{id}")
     public ResponseEntity<?> deleteRoom(@PathVariable UUID id){
         roomService.deleteRoom(id);
