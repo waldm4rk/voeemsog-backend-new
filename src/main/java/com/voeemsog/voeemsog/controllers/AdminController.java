@@ -8,9 +8,11 @@ import com.voeemsog.voeemsog.repositories.RoomRepository;
 import com.voeemsog.voeemsog.repositories.RoomTranslationRepository;
 import com.voeemsog.voeemsog.services.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -38,8 +40,7 @@ public class AdminController {
     @PutMapping("/room")
     public ResponseEntity<Room> upsertRoom(@RequestBody Room room){
         UUID id = roomService.getIdByCode(room.getCode());
-        if(id == null) id = UUID.randomUUID();
-        room.setId(id);
+        if(id != null) room.setId(id);;
         roomRepository.saveAndFlush(room);
         return new ResponseEntity<>(room, HttpStatusCode.valueOf(201));
     }
@@ -57,6 +58,9 @@ public class AdminController {
 
     @PutMapping("/room/translation")
     public ResponseEntity<?> upsertTranslation(@RequestBody RoomTranslation translation, @RequestParam UUID roomId){
+        Room room = roomService.getRoomById(roomId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found")
+        );
         RoomTranslation translation1 = roomTranslationRepository.getRoomTranslationByRoomAndLang(roomService.getRoomById(roomId).orElse(null), translation.getLang());
         if(translation1 != null){
             translation1.setDescription(translation.getDescription());
@@ -65,6 +69,7 @@ public class AdminController {
             roomTranslationRepository.saveAndFlush(translation1);
             return new ResponseEntity<>(true, HttpStatusCode.valueOf(201));
         }
+        translation.setRoom(room);
         roomTranslationRepository.saveAndFlush(translation);
         return new ResponseEntity<>(true, HttpStatusCode.valueOf(201));
     }
