@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
@@ -26,8 +27,20 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
 
     Optional<Room> deleteRoomById(UUID id);
 
-
     @NativeQuery("SELECT id FROM rooms WHERE code = ?1")
     Optional<UUID> getIdByCode(String code);
+    @Query("""
+    select r from Room r
+    join r.translations t
+    where t.lang = :lang
+    order by r.date desc
+    """)
+    List<Room> getRoomsByLang(@Param("lang") String lang, Pageable pageable);
 
+    @Query("""
+    select count(r) from Room r
+    join r.translations t
+    where t.lang = :lang
+""")
+    long countRoomsByLang(@Param("lang") String lang);
 }

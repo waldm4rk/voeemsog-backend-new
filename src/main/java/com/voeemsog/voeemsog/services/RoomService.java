@@ -28,17 +28,17 @@ public class RoomService {
         return fillWithDto(rooms, lang);
     }
     public List<RoomDTO> getRoomsByPage(int page, int limit, String lang){
-        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by("date").descending());
-        List<Room> rooms = roomRepository.getAllByOrderByDateDesc(pageable);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        List<Room> rooms = roomRepository.getRoomsByLang(lang, pageable);
         if(rooms.isEmpty()){
             return null;
         }
         return fillWithDto(rooms, lang);
     }
 
-    public long getNumberOfRooms(){
-        double pages = (double) roomRepository.count() / 10;
-        return (long) Math.ceil(pages);
+    public long getNumberOfRooms(String lang){
+        long total = roomRepository.countRoomsByLang(lang);
+        return (long) Math.ceil((double) total / 10);
     }
 
     public RoomDTO getRoomDTOById(UUID id, String lang){

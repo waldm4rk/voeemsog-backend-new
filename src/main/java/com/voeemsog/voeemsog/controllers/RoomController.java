@@ -32,8 +32,8 @@ public class RoomController {
     }
 
     @GetMapping("/num")
-    public Long getNumberOfPages(){
-        return roomService.getNumberOfRooms();
+    public Long getNumberOfPages(@RequestParam String lang){
+        return roomService.getNumberOfRooms(lang);
     }
 
     @GetMapping("/{id}")
