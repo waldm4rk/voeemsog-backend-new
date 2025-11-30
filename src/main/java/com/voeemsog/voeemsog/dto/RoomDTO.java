@@ -1,5 +1,6 @@
 package com.voeemsog.voeemsog.dto;
 
+import com.voeemsog.voeemsog.models.Room;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

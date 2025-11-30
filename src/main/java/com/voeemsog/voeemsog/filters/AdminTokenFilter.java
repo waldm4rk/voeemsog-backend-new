@@ -37,14 +37,13 @@ public class AdminTokenFilter extends OncePerRequestFilter {
         if (ctx != null && !ctx.isEmpty() && path.startsWith(ctx)) {
             path = path.substring(ctx.length());
         }
-
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request, response);
             return;
         }
 
-        if(!path.startsWith("/admin") || path.equals("/admin/login") || path.equals("/admin/login/")){
+        if(!path.startsWith("/admin") || path.equals("/admin/login") || path.equals("/admin/login/") || path.equals("/admin/api")|| path.equals("/admin/api/")){
             filterChain.doFilter(request, response);
             return;
         }
