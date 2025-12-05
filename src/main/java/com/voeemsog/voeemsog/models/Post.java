@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -33,12 +31,8 @@ public class Post {
     @Builder.Default
     private LocalDate postDate = LocalDate.now();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "post_tags",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag")
-    )
-    @JsonManagedReference
-    private Set<PostCategory> tags = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "tag")
+    private List<String> tags = new ArrayList<>();
 }
