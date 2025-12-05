@@ -3,7 +3,9 @@ package com.voeemsog.voeemsog.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 import lombok.*;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,10 +35,10 @@ public class Post {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "post_categories",
+            name = "post_tags",
             joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
+            inverseJoinColumns = @JoinColumn(name = "tag")
     )
     @JsonManagedReference
-    private Set<PostCategory> categories = new HashSet<>();
+    private Set<PostCategory> tags = new HashSet<>();
 }

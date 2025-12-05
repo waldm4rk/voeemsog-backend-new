@@ -5,6 +5,7 @@ import com.voeemsog.voeemsog.models.Room;
 import com.voeemsog.voeemsog.models.RoomTranslation;
 import com.voeemsog.voeemsog.repositories.RoomRepository;
 import com.voeemsog.voeemsog.repositories.RoomTranslationRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -107,5 +108,13 @@ public class RoomService {
     public Room deleteRoom(UUID id){
         return roomRepository.deleteRoomById(id).orElse(null);
     }
-
+    @Transactional
+    public void deleteRoomsAndTranslations(String code){
+        Room room = roomRepository.getRoomByCode(code);
+        List<RoomTranslation> translations = roomTranslationRepository.getRoomTranslationsByRoom(room);
+        for(RoomTranslation translation : translations){
+            roomTranslationRepository.deleteRoomTranslationById(translation.getId());
+        }
+        roomRepository.delete(room);
+    }
 }

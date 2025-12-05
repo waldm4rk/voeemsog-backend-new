@@ -43,7 +43,7 @@ public class AdminTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        if(!path.startsWith("/admin") || path.equals("/admin/login") || path.equals("/admin/login/") || path.equals("/admin/api")|| path.equals("/admin/api/")){
+        if(!path.startsWith("/admin") || path.equals("/admin/login") || path.equals("/admin/login/") || path.equals("/admin/api")|| path.equals("/admin/api/") || path.equals("/admin/check-cookie")){
             filterChain.doFilter(request, response);
             return;
         }

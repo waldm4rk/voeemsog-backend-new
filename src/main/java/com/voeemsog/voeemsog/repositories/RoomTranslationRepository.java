@@ -15,4 +15,6 @@ public interface RoomTranslationRepository extends JpaRepository<RoomTranslation
     List<RoomTranslation> getRoomTranslationsByNameContainingIgnoreCaseAndLang(String name, String lang);
 
     Integer countRoomTranslationsByLang(String lang);
+
+    void deleteRoomTranslationById(UUID id);
 }

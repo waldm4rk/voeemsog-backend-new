@@ -43,4 +43,8 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
     where t.lang = :lang
 """)
     long countRoomsByLang(@Param("lang") String lang);
+
+    void deleteRoomByCode(String code);
+
+    Room getRoomByCode(String code);
 }

@@ -1,68 +1,36 @@
 package com.voeemsog.voeemsog.services;
 
-import com.voeemsog.voeemsog.dto.PostRequest;
 import com.voeemsog.voeemsog.models.Post;
-import com.voeemsog.voeemsog.models.PostCategory;
-import com.voeemsog.voeemsog.repositories.PostCategoryRepository;
 import com.voeemsog.voeemsog.repositories.PostRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 public class PostService {
+    @Autowired
+    private PostRepository postRepository;
 
-    private final PostRepository postRepository;
-    private final PostCategoryRepository categoryRepository;
-
-    // --- Категории ---
-
-    public List<PostCategory> getCategoriesByLang(String lang) {
-        return categoryRepository.findAllByLang(lang);
+    public List<Post> getPostsByTag(String tag) {
+        return postRepository.findByTag(tag);
     }
 
-    public PostCategory addCategory(PostCategory category) {
-        return categoryRepository.save(category);
-    }
-
-    public void deleteCategory(UUID categoryId) {
-        categoryRepository.deleteById(categoryId);
-    }
-
-    public PostCategory getCategoryById(UUID categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("Category not found"));
-    }
-
-    // --- Посты ---
-
-    public List<Post> getPostsByCategories(Collection<PostCategory> categories) {
-        return postRepository.findDistinctByCategoriesIn(categories);
-    }
-    public List<Post> getPostsByCategory(PostCategory category){
-        return postRepository.getPostsByCategoriesContaining(category);
-    }
-
-    @Transactional
-    public Post createPost(PostRequest request) {
-        Post post = Post.builder()
-                .title(request.getTitle())
-                .text(request.getText())
-                .build();
-
-        Set<PostCategory> categories = new HashSet<>();
-        for (UUID categoryId : request.getCategories()) {
-            categories.add(getCategoryById(categoryId));
+    public List<Post> getAllPosts(List<String> tags){
+        HashSet<Post> set = new HashSet<>();
+        for(String tag : tags){
+            set.addAll(getPostsByTag(tag));
         }
-        post.setCategories(categories);
+        List<Post> sortedPosts = new ArrayList<>(set);
+        sortedPosts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
 
-        return postRepository.save(post);
+        return sortedPosts;
     }
-
-    public void deletePost(UUID postId) {
-        postRepository.deleteById(postId);
+    public void createPost(Post post){
+        postRepository.saveAndFlush(post);
     }
 }

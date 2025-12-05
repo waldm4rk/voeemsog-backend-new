@@ -2,11 +2,16 @@ package com.voeemsog.voeemsog.controllers;
 
 import com.sun.net.httpserver.HttpsServer;
 import com.voeemsog.voeemsog.dto.RoomDTO;
+import com.voeemsog.voeemsog.models.Post;
 import com.voeemsog.voeemsog.models.Room;
 import com.voeemsog.voeemsog.models.RoomTranslation;
+import com.voeemsog.voeemsog.models.Story;
 import com.voeemsog.voeemsog.repositories.RoomRepository;
 import com.voeemsog.voeemsog.repositories.RoomTranslationRepository;
+import com.voeemsog.voeemsog.repositories.StoryRepository;
+import com.voeemsog.voeemsog.services.PostService;
 import com.voeemsog.voeemsog.services.RoomService;
+import com.voeemsog.voeemsog.services.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -26,7 +31,11 @@ public class AdminController {
     private RoomRepository roomRepository;
     @Autowired
     private RoomTranslationRepository roomTranslationRepository;
-
+    @Autowired
+    private PostService postService;
+    @Autowired
+    private StoryService storyService;
+    private StoryRepository storyRepository;
 
     // Null room crashes server
     // FIXED?
@@ -78,5 +87,27 @@ public class AdminController {
     public ResponseEntity<?> deleteRoom(@PathVariable UUID id){
         roomService.deleteRoom(id);
         return new ResponseEntity<>(false, HttpStatusCode.valueOf(204));
+    }
+
+    @DeleteMapping("/room/code/{code}")
+    public ResponseEntity<?> deleteRoomByCode(@PathVariable String code){
+        roomService.deleteRoomsAndTranslations(code);
+        return ResponseEntity.ok(null);
+    }
+
+    // Posts
+    @PostMapping("/post")
+    public void createPost(@RequestBody Post post){
+        postService.createPost(post);
+    }
+
+    // Stories
+    @PostMapping("/story")
+    public void upsertStory(@RequestBody Story story){
+        storyService.createStory(story);
+    }
+    @DeleteMapping("/story/{storyId}")
+    public void deleteStory(@PathVariable UUID storyId){
+        storyService.deleteStory(storyId);
     }
 }

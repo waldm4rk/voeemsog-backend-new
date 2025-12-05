@@ -4,6 +4,7 @@ import com.voeemsog.voeemsog.models.Story;
 import com.voeemsog.voeemsog.models.StoryCategory;
 import com.voeemsog.voeemsog.repositories.StoryCategoryRepository;
 import com.voeemsog.voeemsog.repositories.StoryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,12 @@ public class StoryService {
     }
     public Story getStory(UUID storyId){
         return storyRepository.getStoryById(storyId).orElse(null);
+    }
+    public void createStory(Story story){
+        storyRepository.saveAndFlush(story);
+    }
+    @Transactional
+    public void deleteStory(UUID id){
+        storyRepository.deleteStoryById(id);
     }
 }
