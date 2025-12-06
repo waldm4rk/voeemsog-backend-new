@@ -39,8 +39,6 @@ public class AdminLoginController {
 
     @PostMapping("/api")
     public ResponseEntity<?> api(@RequestBody String api){
-        System.out.println(System.getenv("FIRST_API_KEY"));
-        System.out.println(api);
         if(System.getenv("FIRST_API_KEY").equals(api)){
             return ResponseEntity.ok(true);
         }
