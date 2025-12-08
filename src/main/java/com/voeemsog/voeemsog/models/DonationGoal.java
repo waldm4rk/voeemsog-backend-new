@@ -13,6 +13,7 @@ public class DonationGoal {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String title;
+    private String title_ru;
     @Column(name="target_amount")
     private float targetAmount;
     @Column(name="current_amount")

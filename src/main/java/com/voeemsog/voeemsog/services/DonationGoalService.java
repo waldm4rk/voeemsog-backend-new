@@ -1,5 +1,6 @@
 package com.voeemsog.voeemsog.services;
 
+import com.voeemsog.voeemsog.models.Donation;
 import com.voeemsog.voeemsog.models.DonationGoal;
 import com.voeemsog.voeemsog.dto.GoalRequest;
 import com.voeemsog.voeemsog.repositories.DonationGoalRepository;
@@ -11,8 +12,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class DonationGoalService {
-    private DonationGoalRepository goalRepository;
-
+    private final DonationGoalRepository goalRepository;
+    private final DonationService donationService;
     public DonationGoal createGoal(GoalRequest request) {
         // Делаем неактивной предыдущую цель
         goalRepository.getDonationGoalByActive(true).ifPresent(goal -> {
@@ -44,9 +45,10 @@ public class DonationGoalService {
             goalRepository.save(goal);
         });
     }
-    public boolean getDonation(float amount){
+    public boolean getDonation(Donation donation){
         DonationGoal currentGoal = goalRepository.getDonationGoalByActive(true).orElseThrow(() -> new IllegalStateException("No goal active"));
-        currentGoal.setCurrentAmount(currentGoal.getCurrentAmount() + amount);
+        currentGoal.setCurrentAmount(currentGoal.getCurrentAmount() + donation.getAmount());
+        donationService.createDonation(donation);
         return currentGoal.getCurrentAmount() >= currentGoal.getTargetAmount();
     }
 }

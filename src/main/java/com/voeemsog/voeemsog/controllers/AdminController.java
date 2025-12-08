@@ -3,18 +3,18 @@ package com.voeemsog.voeemsog.controllers;
 import com.sun.net.httpserver.HttpsServer;
 import com.voeemsog.voeemsog.dto.GoalRequest;
 import com.voeemsog.voeemsog.dto.RoomDTO;
-import com.voeemsog.voeemsog.models.Post;
-import com.voeemsog.voeemsog.models.Room;
-import com.voeemsog.voeemsog.models.RoomTranslation;
-import com.voeemsog.voeemsog.models.Story;
+import com.voeemsog.voeemsog.models.*;
 import com.voeemsog.voeemsog.repositories.DonationGoalRepository;
 import com.voeemsog.voeemsog.repositories.RoomRepository;
 import com.voeemsog.voeemsog.repositories.RoomTranslationRepository;
 import com.voeemsog.voeemsog.repositories.StoryRepository;
+import com.voeemsog.voeemsog.repositories.music.AlbumRepository;
 import com.voeemsog.voeemsog.services.DonationGoalService;
 import com.voeemsog.voeemsog.services.PostService;
 import com.voeemsog.voeemsog.services.RoomService;
 import com.voeemsog.voeemsog.services.StoryService;
+import com.voeemsog.voeemsog.services.music.AlbumService;
+import com.voeemsog.voeemsog.services.music.TrackService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +37,8 @@ public class AdminController {
     private final StoryService storyService;
     private final StoryRepository storyRepository;
     private final DonationGoalService donationGoalService;
+    private final AlbumService albumService;
+    private final TrackService trackService;
     // Null room crashes server
     // FIXED?
     @PostMapping("/room")
@@ -112,7 +114,7 @@ public class AdminController {
     }
 
     // Donations
-    @GetMapping("/donations/upsert/{title}")
+    @PostMapping("/donations/upsert/{title}")
     public ResponseEntity<?> createDonationGoal(@PathVariable String title, @RequestParam String amount){
         float _amount = Float.parseFloat(amount);
         boolean activeGoalExists = donationGoalService.getCurrentGoal().isPresent();
@@ -120,12 +122,41 @@ public class AdminController {
         GoalRequest req = new GoalRequest();
         req.setTitle(title);
         req.setTargetAmount(_amount);
-
         if(activeGoalExists){
             donationGoalService.updateGoal(req);
             return ResponseEntity.ok(null);
         }
         donationGoalService.createGoal(req);
+        return ResponseEntity.ok(null);
+    }
+
+    // Music
+    @PostMapping("/music/album")
+    public ResponseEntity<?> upsertAlbum(@RequestBody Album album){
+        albumService.postAlbum(album);
+        return ResponseEntity.ok(album);
+    }
+    @DeleteMapping("/music/album/{albumId}")
+    public ResponseEntity<?> deleteAlbum(@PathVariable UUID albumId){
+        albumService.deleteAlbum(albumId);
+        return ResponseEntity.ok(null);
+    }
+    @PostMapping("/music/track")
+    public ResponseEntity<?> addTrack(@RequestBody Track track){
+        try {
+            trackService.createTrack(track);
+        }catch(IllegalStateException e){
+            return (ResponseEntity<?>) ResponseEntity.notFound();
+        }
+        return ResponseEntity.ok(track);
+    }
+    @DeleteMapping("/music/track")
+    public ResponseEntity<?> deleteTrack(@RequestParam UUID albumId, @RequestParam int trackOrder){
+        try {
+            trackService.deleteTrack(albumId, trackOrder);
+        } catch(IllegalStateException e){
+            return (ResponseEntity<?>) ResponseEntity.notFound();
+        }
         return ResponseEntity.ok(null);
     }
 }
