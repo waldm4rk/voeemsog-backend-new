@@ -27,7 +27,15 @@ public class PostService {
             set.addAll(getPostsByTag(tag));
         }
         List<Post> sortedPosts = new ArrayList<>(set);
-        sortedPosts.sort((p1, p2) -> p2.getPostDate().compareTo(p1.getPostDate()));
+        sortedPosts.sort((p1, p2) -> {
+            // если pinned разные — сначала true
+            if (p1.isPinned() != p2.isPinned()) {
+                return Boolean.compare(p2.isPinned(), p1.isPinned());
+            }
+
+            // если pinned одинаковые — сортируем по дате (новые выше)
+            return p2.getPostDate().compareTo(p1.getPostDate());
+        });
 
         return sortedPosts;
     }

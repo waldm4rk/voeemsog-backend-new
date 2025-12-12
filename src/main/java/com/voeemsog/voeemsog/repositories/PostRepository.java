@@ -12,8 +12,22 @@ import java.util.UUID;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, UUID> {
-    @Query("SELECT p FROM Post p JOIN p.tags t WHERE t = :tag")
+    @Query("""
+    SELECT p FROM Post p\s
+    JOIN p.tags t\s
+    WHERE t = :tag
+    ORDER BY\s
+        p.pinned DESC,
+        p.postDate DESC    \s
+   \s""")
     List<Post> findByTag(@Param("tag") String tag);
+    @Query("""
+    SELECT p FROM Post p
+    ORDER BY\s
+        p.pinned DESC,
+        p.postDate DESC
+   \s""")
+    List<Post> findAllSorted();
     @Transactional
     void deletePostById(UUID id);
 }

@@ -35,4 +35,6 @@ public class Post {
     @CollectionTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "tag")
     private List<String> tags = new ArrayList<>();
+
+    private boolean pinned;
 }
