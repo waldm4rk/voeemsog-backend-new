@@ -19,7 +19,7 @@ public class StoryService {
     private StoryCategoryRepository categoryRepository;
     public List<Story> getStoriesByCategory(int categoryID, String lang){
         StoryCategory cat = categoryRepository.getStoryCategoryById(categoryID);
-        return storyRepository.getStoriesByCategoryAndLang(cat, lang);
+        return storyRepository.getStoriesByCategoryAndLangOrderByOrderAsc(cat, lang);
     }
     public List<StoryCategory> getAllCategories(String lang){
         return categoryRepository.getStoryCategoriesByLang(lang);

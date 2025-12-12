@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface StoryRepository extends JpaRepository<Story, UUID> {
-    List<Story> getStoriesByCategoryAndLang(StoryCategory category, String lang);
+    List<Story> getStoriesByCategoryAndLangOrderByOrderAsc(StoryCategory category, String lang);
 
     Optional<Story> getStoryById(UUID id);
 

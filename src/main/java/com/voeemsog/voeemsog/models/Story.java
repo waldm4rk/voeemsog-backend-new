@@ -22,4 +22,6 @@ public class Story {
     @Column(name = "reading_time")
     private int readingTime;
     private String lang;
+    @Column(name = "\"order\"")
+    private int order;
 }
