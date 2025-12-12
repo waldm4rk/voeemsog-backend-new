@@ -2,6 +2,7 @@ package com.voeemsog.voeemsog.services;
 
 import com.voeemsog.voeemsog.models.Post;
 import com.voeemsog.voeemsog.repositories.PostRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class PostService {
     public void createPost(Post post){
         postRepository.saveAndFlush(post);
     }
+    @Transactional
     public void deletePost(UUID postId){
         postRepository.deletePostById(postId);
     }

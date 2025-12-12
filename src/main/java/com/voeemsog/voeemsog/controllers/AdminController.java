@@ -15,6 +15,7 @@ import com.voeemsog.voeemsog.services.RoomService;
 import com.voeemsog.voeemsog.services.StoryService;
 import com.voeemsog.voeemsog.services.music.AlbumService;
 import com.voeemsog.voeemsog.services.music.TrackService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -102,6 +103,7 @@ public class AdminController {
     public void createPost(@RequestBody Post post){
         postService.createPost(post);
     }
+    @Transactional
     @DeleteMapping("/post/{postId}")
     public void deletePost(@PathVariable UUID postId){
         postService.deletePost(postId);
