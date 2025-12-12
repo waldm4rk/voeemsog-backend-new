@@ -46,8 +46,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("*"));
-        config.setAllowCredentials(false);
+        config.setAllowedOrigins(List.of("https://voeemsog.com", "https://www.voeemsog.com", "http://localhost:4200"));
+        config.setAllowCredentials(true);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Content-Type", "Authorization", "X-Requested-With"));
         config.setExposedHeaders(List.of("Set-Cookie"));

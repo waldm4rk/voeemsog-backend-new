@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface TrackRepository extends JpaRepository<Track, UUID> {
-    List<Track> getTracksByAlbum(Album album);
+    List<Track> getTracksByAlbumOrderByOrder(Album album);
     void deleteTrackByAlbumAndOrder(Album album, int order);
 }

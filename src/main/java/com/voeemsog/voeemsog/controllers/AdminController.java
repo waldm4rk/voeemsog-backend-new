@@ -102,7 +102,10 @@ public class AdminController {
     public void createPost(@RequestBody Post post){
         postService.createPost(post);
     }
-
+    @DeleteMapping("/post/{postId}")
+    public void deletePost(@PathVariable UUID postId){
+        postService.deletePost(postId);
+    }
     // Stories
     @PostMapping("/story")
     public void upsertStory(@RequestBody Story story){

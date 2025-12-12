@@ -18,7 +18,7 @@ public class TrackService {
 
     public List<Track> getTracksByAlbum(UUID albumId){
         Album album = albumRepository.getAlbumById(albumId).orElseThrow(() -> new IllegalStateException("No album with that id"));
-        return trackRepository.getTracksByAlbum(album);
+        return trackRepository.getTracksByAlbumOrderByOrder(album);
     }
     public void createTrack(Track track){
         trackRepository.saveAndFlush(track);

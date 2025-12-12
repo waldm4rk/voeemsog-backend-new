@@ -30,6 +30,7 @@ public class AdminLoginController {
             cookie.setHttpOnly(true);
             cookie.setSecure(true);
             cookie.setPath("/");
+            cookie.setAttribute("SameSite", "None");
             cookie.setMaxAge(30 * 60);
             response.addCookie(cookie);
             return ResponseEntity.ok().build();

@@ -15,6 +15,7 @@ public class Track {
     private String link;
     private String description;
     private String description_ru;
+    @Column(name = "\"order\"")
     private int order;
     @ManyToOne
     @JoinColumn(name="album_id")
