@@ -30,10 +30,10 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
     @NativeQuery("SELECT id FROM rooms WHERE code = ?1")
     Optional<UUID> getIdByCode(String code);
     @Query("""
-    select r from Room r
+    select distinct r from Room r
     join r.translations t
     where t.lang = :lang
-    order by r.date desc
+    order by r.date desc, r.id desc
     """)
     List<Room> getRoomsByLang(@Param("lang") String lang, Pageable pageable);
 
