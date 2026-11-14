@@ -2,14 +2,14 @@ package com.voeemsog.voeemsog.services;
 
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Set;
+
+
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AdminTokenService {
-    private final HashMap<String, Long> validTokens = new HashMap<>();
+    private final ConcurrentHashMap<String, Long> validTokens = new ConcurrentHashMap<>();
 
     public String generateToken(){
         String token = UUID.randomUUID().toString();

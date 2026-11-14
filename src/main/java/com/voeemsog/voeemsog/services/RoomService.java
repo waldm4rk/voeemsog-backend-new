@@ -89,6 +89,7 @@ public class RoomService {
 
 
     public RoomDTO roomToDTO(Room room, String lang){
+        if (room == null) return null;
         RoomTranslation roomTranslation = roomTranslationRepository.getRoomTranslationByRoomAndLang(room, lang);
         if(roomTranslation == null) return null;
         RoomDTO dto = new RoomDTO(

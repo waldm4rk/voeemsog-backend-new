@@ -24,7 +24,7 @@ public class AdminLoginController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> request, HttpServletResponse response){
         String apiKey = request.get("apiKey");
-        if(System.getenv("SECOND_API_KEY").equals(apiKey)){
+        if(apiKey != null && apiKey.equals(System.getenv("SECOND_API_KEY"))){
             String token = tokenService.generateToken();
             Cookie cookie = new Cookie("admin_token", token);
             cookie.setHttpOnly(true);
@@ -40,7 +40,7 @@ public class AdminLoginController {
 
     @PostMapping("/api")
     public ResponseEntity<?> api(@RequestBody String api){
-        if(System.getenv("FIRST_API_KEY").equals(api)){
+        if(api != null && api.equals(System.getenv("FIRST_API_KEY"))){
             return ResponseEntity.ok(true);
         }
         return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
@@ -48,8 +48,6 @@ public class AdminLoginController {
 
     @GetMapping("/check-cookie")
     public ResponseEntity<?> checkCookie(@CookieValue(name = "admin_token", required = false) String token) {
-        System.out.println(token);
-        System.out.println(tokenService.isTokenValid(token));
         if (token == null || !tokenService.isTokenValid(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -60,7 +58,8 @@ public class AdminLoginController {
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("admin_token", "");
         cookie.setHttpOnly(true);
-        // cookie.setSecure(true);
+        cookie.setSecure(true);
+        cookie.setAttribute("SameSite", "None");
         cookie.setPath("/");
         cookie.setMaxAge(0); // удалить
         response.addCookie(cookie);
