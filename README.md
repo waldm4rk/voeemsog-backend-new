@@ -74,8 +74,6 @@ This code is a **historical implementation and learning/portfolio artifact**, no
 - Donation amounts use `float` rather than `BigDecimal`, and some writes need explicit transactional guarantees.
 - The archived schema is partial; schema migration tooling and proper integration tests remain work to do.
 
-See [`docs/INTERVIEW_PREP_RU.md`](docs/INTERVIEW_PREP_RU.md) for the technical review and interview preparation notes.
-
 ## Why this repository exists
 
 The original Java backend was independently implemented before the product switched to Supabase to reduce infrastructure costs. This repository documents the original engineering work, including architectural decisions and remaining trade-offs. The current Supabase deployment is a separate implementation.
