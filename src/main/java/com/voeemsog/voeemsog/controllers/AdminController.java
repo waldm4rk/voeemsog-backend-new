@@ -1,6 +1,5 @@
 package com.voeemsog.voeemsog.controllers;
 
-import com.sun.net.httpserver.HttpsServer;
 import com.voeemsog.voeemsog.dto.GoalRequest;
 import com.voeemsog.voeemsog.dto.RoomDTO;
 import com.voeemsog.voeemsog.models.*;

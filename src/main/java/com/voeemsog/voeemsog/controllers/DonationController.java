@@ -29,7 +29,8 @@ public class DonationController {
         JsonNode json = new ObjectMapper().readTree(dataJson);
 
         // Проверяем токен
-        if (!System.getenv("KOFI_KEY").equals(json.get("verification_token").asText())) {
+        String configuredToken = System.getenv("KOFI_KEY");
+        if (configuredToken == null || !configuredToken.equals(json.path("verification_token").asText())) {
             return ResponseEntity.status(401).build();
         }
 
